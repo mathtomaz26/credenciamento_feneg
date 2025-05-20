@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Importar Pré-Cadastro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Importar Base de Pré-Cadastro</h3>
+            <a href="/admin" class="btn btn-secondary btn-sm">Voltar</a>
+        </div>
+
+        <form id="uploadForm" enctype="multipart/form-data" class="border p-4 bg-white rounded shadow-sm">
+            <div class="mb-3">
+                <label for="arquivo" class="form-label">Selecione um arquivo Excel (.xlsx)</label>
+                <input type="file" name="arquivo" id="arquivo" class="form-control" accept=".xlsx" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Importar Arquivo</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Evita o envio tradicional do formulário
+
+            const formData = new FormData(this);
+
+            fetch('/upload-pre-cadastro', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(msg => {
+                alert(msg); // Mostra popup com a mensagem retornada
+                document.getElementById('uploadForm').reset(); // Limpa o formulário
+            })
+            .catch(error => {
+                alert("Erro no upload: " + error);
+            });
+        });
+    </script>
+</body>
+</html>

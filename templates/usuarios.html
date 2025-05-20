@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Usuários</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Gerenciar Usuários</h3>
+            <a href="/admin" class="btn btn-secondary btn-sm">Voltar</a>
+        </div>
+        <form method="POST" class="row g-2 mb-4">
+            <div class="col-md-3">
+                <input type="text" name="user" class="form-control" placeholder="Usuário" required>
+            </div>
+            <div class="col-md-3">
+                <input type="password" name="password" class="form-control" placeholder="Senha" required>
+            </div>
+            <div class="col-md-3">
+                <select name="perfil" class="form-select" required>
+                    <option value="Comum">Comum</option>
+                    <option value="Administrador">Administrador</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-success w-100">Cadastrar</button>
+            </div>
+        </form>
+        {% if mensagem %}
+        <div class="alert alert-info">{{ mensagem }}</div>
+        {% endif %}
+        <table class="table table-striped table-bordered table-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Usuário</th>
+                    <th>Perfil</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in usuarios %}
+                <tr>
+                    <td>{{ u.user }}</td>
+                    <td>{{ u.perfil }}</td>
+                    <td class="text-end">
+                        <a href="/usuarios/editar/{{ u.user }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                        <a href="/usuarios/excluir/{{ u.user }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir este usuário?')">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Impressões</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        async function atualizarTabela() {
+            const nome = document.querySelector('[name="nome"]').value;
+            const impressora = document.querySelector('[name="impressora"]').value;
+            const data = document.querySelector('[name="data"]').value;
+
+            const params = new URLSearchParams({ nome, impressora, data });
+            const resposta = await fetch("/historico/atualizar?" + params);
+            const registros = await resposta.json();
+            const corpo = document.getElementById("corpo-tabela");
+            corpo.innerHTML = "";
+            if (registros.length === 0) {
+                corpo.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
+            } else {
+                for (let r of registros) {
+                    corpo.innerHTML += `
+                        <tr>
+                            <td>${r.nome}</td>
+                            <td>${r.empresa}</td>
+                            <td>${r.email}</td>
+                            <td>${r.telefone}</td>
+                            <td>${r.data_impressao}</td>
+                            <td>${r.data_hora_completa}</td>
+                            <td>${r.impressora}</td>
+                        </tr>
+                    `;
+                }
+            }
+        }
+
+        setInterval(atualizarTabela, 5000);
+        window.onload = atualizarTabela;
+    </script>
+</head>
+<body class="bg-light p-3">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-column flex-md-row">
+            <h3 class="mb-3 mb-md-0">Histórico de Impressões</h3>
+            <div class="d-flex gap-2">
+                <a href="/exportar-historico" class="btn btn-outline-primary btn-sm">📥 Exportar CSV</a>
+                <a href="/admin" class="btn btn-secondary btn-sm">Voltar</a>
+            </div>
+        </div>
+
+        <form class="row g-2 mb-3" onsubmit="event.preventDefault(); atualizarTabela();">
+            <div class="col-sm-3">
+                <input type="text" name="nome" class="form-control" placeholder="Filtrar por nome">
+            </div>
+            <div class="col-sm-3">
+                <input type="text" name="impressora" class="form-control" placeholder="Filtrar por impressora">
+            </div>
+            <div class="col-sm-3">
+                <input type="date" name="data" class="form-control">
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary w-100">Aplicar Filtros</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Empresa</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Data Impressão</th>
+                        <th>Data/Hora Completa</th>
+                        <th>Impressora</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela">
+                    <tr><td colspan="7" class="text-center text-muted">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
