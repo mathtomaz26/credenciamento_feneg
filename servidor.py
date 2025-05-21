@@ -17,8 +17,8 @@ import re
 app = Flask(__name__)
 app.secret_key = 'chave_super_secreta'
 
-client = MongoClient('mongodb://localhost:27017/')
-db = client['credenciamento_db']
+client = MongoClient('mongodb://mongo:27017/')
+db = client['credenciamento']
 colecao_pre = db['pre_cadastro']
 colecao_impressao = db['registro_impressao']
 colecao_usuarios = db['usuarios']
