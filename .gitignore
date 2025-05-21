@@ -1,0 +1,15 @@
+# Ignorar caches e arquivos temporários
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar arquivos de pacotes
+*.zip
+
+# Ignorar arquivos de logs (se tiver)
+*.log
+
+# Ignorar ambientes virtuais (se usar)
+venv/
+.env
